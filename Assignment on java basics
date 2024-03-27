@@ -1,0 +1,327 @@
+Assignment #1
+Calendar for given month and year
+
+package com.print.calendar;
+import java.util.Scanner;
+
+public class Calendar {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input month and year
+        System.out.print("Enter the month (1-12): ");
+        int month = scanner.nextInt();
+        while (month < 1 || month > 12) {
+            System.out.println("Invalid month. Please enter a number between 1 and 12.");
+            System.out.print("Enter the month (1-12): ");
+            month = scanner.nextInt();
+        }
+
+        System.out.print("Enter the year: ");
+        int year = scanner.nextInt();
+
+        // Print calendar
+        printCalendar(month, year);
+    }
+
+    public static void printCalendar(int month, int year) {
+        // Days in each month
+        int[] daysInMonth = {31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+        // Get the day of the week for the first day of the month
+        int startDay = getStartDay(month, year);
+
+        // Print calendar header
+        System.out.println("\nSu Mo Tu We Th Fr Sa");
+
+        // Print leading spaces
+        for (int i = 0; i < startDay; i++) {
+            System.out.print("   ");
+        }
+
+        // Print days
+        for (int day = 1; day <= daysInMonth[month - 1]; day++) {
+            System.out.printf("%2d ", day);
+            if ((day + startDay) % 7 == 0 || day == daysInMonth[month - 1]) {
+                System.out.println();
+            }
+        }
+    }
+
+    public static int getStartDay(int month, int year) {
+        // Zeller's Congruence algorithm to get the starting day of the week
+        int q = 1; // Day of the month
+        int m = month; // Month (3 = March, 4 = April, ..., 12 = December)
+        int K = year % 100; // Year of the century
+        int J = year / 100; // Zero-based century
+        int h = (q + (13 * (m + 1)) / 5 + K + (K / 4) + (J / 4) + 5 * J) % 7;
+        // Adjust to have Sunday as the starting day of the week
+        return (h + 6) % 7;
+    }
+
+    public static boolean isLeapYear(int year) {
+        // Check if the year is a leap year
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+}
+
+
+
+
+Assignment #2
+Number to Words
+
+package com.numbertowords.convert;
+import java.util.Scanner;
+public class NumberToWord {
+
+
+
+        static String[] oneDigit={"","one","two","three","four","five","six","seven","eight","nine"};
+        static String[] twoDigit={"","ten","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"};
+
+        static String convertThreeDigit(int num)
+        {
+            if(num==0)
+            {
+                return "";
+
+            }
+
+            else if(num<10)
+            {
+                return oneDigit[num];
+            }
+
+            else if(num<20)
+            {
+                return oneDigit[num%10]+"teen";
+            }
+            else{
+                return twoDigit[num/10]+" "+oneDigit[num%10];
+            }
+
+
+
+    }
+
+    static String convertLessThanThousand(int num)
+    {
+        if(num<100)
+        {
+            return convertThreeDigit(num);
+        }
+        else{
+            return oneDigit[num/100]+" hundred "+convertThreeDigit(num%100);
+        }
+    }
+
+    static String convertToWords(int num)
+    {
+        if(num==0)
+        {
+            return "zero";
+        }
+
+        String result="";
+
+        if(num>=1000000000)
+        {
+            result+=convertLessThanThousand(num/1000000000)+" billion ";
+            num%=1000000000;
+        }
+
+        if(num>=1000000)
+        {
+            result+=convertLessThanThousand(num/1000000)+" million ";
+            num%=1000000;
+        }
+
+        if(num>=1000)
+        {
+            result+=convertLessThanThousand(num/1000)+" thousand ";
+            num%=1000;
+        }
+
+        if(num>0)
+        {
+            result+=convertLessThanThousand(num);
+        }
+
+        return result.trim();
+
+
+
+    }
+
+    public static void main(String[] args)
+    {
+        Scanner sc=new Scanner(System.in);
+
+        System.out.println("enter a number : ");
+        int number=sc.nextInt();
+
+        System.out.println("number in words : "+convertToWords(number));
+
+        sc.close();
+
+    }
+    
+}
+
+
+
+Assignment #3
+Inheritance and Polymorphism
+
+package com.inheritanceandpolymorphism;
+
+public abstract class Circle {
+     double radius=1.0;
+     String color="red";
+
+    abstract double getVolume();
+    public Circle(){
+
+    }
+
+    public Circle(double radius)
+    {
+        this.radius=radius;
+    }
+
+    public Circle(double radius,String color)
+    {
+        this.radius=radius;
+        this.color=color;
+    }
+
+    public double getRadius(){
+        return this.radius;
+    }
+
+    public void setRadius(double radius)
+    {
+        this.radius=radius;
+    }
+
+    public String getColor()
+    {
+        return this.color;
+    }
+
+    public void setColor(String color){
+        this.color=color;
+    }
+
+    public double getArea()
+    {
+        double area=0;
+        area=3.14*getRadius()*getRadius();
+
+        return area;
+    }
+
+}
+
+
+package com.inheritanceandpolymorphism;
+
+public class Cylinder extends Circle{
+
+    private double height=1.0;
+
+    public Cylinder()
+    {
+
+    }
+
+    public Cylinder(double radius)
+    {
+        this.radius=radius;
+    }
+
+    public Cylinder(double radius,double height)
+    {
+        this.radius=radius;
+        this.height=height;
+    }
+
+    public Cylinder(double radius,double height,String color) {
+        this.radius = radius;
+        this.height = height;
+        this.color = color;
+    }
+    public double getHeight()
+    {
+        return this.height;
+    }
+
+    public void setHeigth(double heigth)
+    {
+        this.height=height;
+    }
+
+    public double getVolume()
+    {
+        double r=getRadius();
+       double volume=0;
+       volume=3.14*r*r*getHeight();
+
+       return volume;
+    }
+
+    public static void main(String[] args)
+    {
+        Circle[] circles= {
+                new Cylinder(12.34),
+                new Cylinder(12.34, 10.0),
+                new Cylinder(12.34, 10.0, "blue")
+        };
+
+        for(int i=0;i<circles.length;i++)
+        {
+            System.out.println("Area "+(i+1)+": " + circles[i].getArea());
+
+            System.out.println("Volume "+(i+1)+": "+ circles[i].getVolume());
+
+        }
+        }
+
+    }
+
+
+
+
+
+Assignment #4
+Reverse a Sentence by Words
+
+package com.reversesentence.bywords;
+
+public class SentenceReverse {
+
+    public static void reverseByWords(String sentence) {
+        String[] words = sentence.split("\\s+");
+
+        StringBuilder reverse = new StringBuilder();
+        for (int i = words.length - 1; i >= 0; i--) {
+            reverse.append(words[i]).append(" ");
+        }
+
+       System.out.println(reverse.toString().trim());
+
+    }
+    public static void main(String[] args)
+    {
+
+       reverseByWords("my name is akshada");
+       reverseByWords("Cummins College of engineering for women pune");
+       reverseByWords("Information technology");
+       reverseByWords("student of third year information technology");
+
+    }
+}
+
+
